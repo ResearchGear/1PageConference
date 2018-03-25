@@ -3,9 +3,12 @@ import json
 import requests
 import sqlite3
 
-import requests
 cookies = {}
 uid = '3134060'
+
+from acm import ACM
+
+
 class PageParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
@@ -57,18 +60,30 @@ def download_doc(uid):
     with open('b.pdf', 'wb') as f:
         f.write(pdf.content)
 
+def try_a(paper):
+    global cookies
+    url = 'https://dl.acm.org/ft_gateway.cfm?id=%s' % paper
+    response = requests.get(url, cookies = cookies, headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36'})
+    cookies.update(response.cookies)
+    import bpdb; bpdb.set_trace()
+
 def parse_conference(cid):
     url = 'https://dl.acm.org/citation.cfm?id=%d&preflayout=flat#prox' % cid
     response = requests.get(url, cookies = cookies, headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36'})
     print 'Conference URL: ', url
     parser = ConferenceParser()
     parser.feed(response.text)
-    import bpdb; bpdb.set_trace()
+    return parser.papers
 
     #download_doc(uid)
 
 # CCS 2017
-cid = 3133956
+cid = '3133956'
+
+
+def work(cid):
+    conference = ACM(cid)
+    conference.download_papers()
 
 if __name__ == '__main__':
-    parse_conference(cid)
+    work(cid)
