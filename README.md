@@ -13,7 +13,7 @@ Create a pdf file containing the first pages of all the papers in a conference.
 To find conference ID, you can first find your conference from
 [ACM Conference List](https://dl.acm.org/events.cfm), and then go to the
 conference page (e.g. [ISCA](https://dl.acm.org/event.cfm?id=RE239)) and check
-the "Publication Archive" tab (e.g. [ISCA 2017](https://dl.acm.org/citation.cfm?id=3079856)).
+the "Publication Archive" tab (e.g. [ISCA 2017](https://dl.acm.org/citation.cfm?id=3079856)). The conference ID is in the URL (e.g., https://dl.acm.org/citation.cfm?id=3079856)
 
 # Limitation
 
