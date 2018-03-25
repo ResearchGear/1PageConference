@@ -1,7 +1,6 @@
 # First Page Conference
 
-Get the first page of all the papers in a conference.
-
+Create a pdf file containing the first pages of all the papers in a conference.  
 # Prerequisites
 
 * pdftk
