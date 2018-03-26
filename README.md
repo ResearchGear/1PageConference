@@ -1,6 +1,8 @@
 # First Page Conference
 
-Create a pdf file containing the first pages of all the papers in a conference.  
+1. Automatically download all papers of a particular conference.
+2. Create a pdf file containing the first pages these papers.
+
 # Prerequisites
 
 * pdftk
