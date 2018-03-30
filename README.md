@@ -1,7 +1,7 @@
 # First Page Conference
 
 1. Automatically download all papers of a particular conference.
-2. Create a pdf file containing the first pages these papers.
+2. Create a pdf file containing the first pages of these papers.
 
 # Prerequisites
 
