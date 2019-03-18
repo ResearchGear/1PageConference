@@ -3,7 +3,8 @@ import os
 import requests
 from HTMLParser import HTMLParser
 
-url_conference = 'http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=%s&pageNumber=%d'
+#url_conference = 'http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=%s&pageNumber=%d'
+url_conference  = 'https://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=%s&filter=issueId EQ "%s"&pageNumber=%d'
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36'}
 url_paper = 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=%s'
 
@@ -47,8 +48,9 @@ class RenderParser(HTMLParser):
 
 
 class IEEE(object):
-    def __init__(self, cid, out_dir=None):
+    def __init__(self, cid, issue_id, out_dir=None):
         self.cid = cid
+        self.issue_id = issue_id
         if out_dir is None:
             self.out_dir = cid
         else:
@@ -58,11 +60,11 @@ class IEEE(object):
         self.papers = []
         self.cookies = {}
 
-    def parse_papers(self, cid):
+    def parse_papers(self, cid, issue_id):
         page = 1
         papers = []
         while True:
-            url = url_conference % (cid, page)
+            url = url_conference % (cid, issue_id, page)
             response = requests.get(url, cookies=self.cookies, headers=headers)
             self.cookies.update(response.cookies)
             parser = ConferenceParser()
@@ -93,10 +95,10 @@ class IEEE(object):
             f.write(response.content)
 
     def download_papers(self):
-        self.papers = self.parse_papers(self.cid)
+        self.papers = self.parse_papers(self.cid, self.issue_id)
         for p in self.papers:
             self.download_paper(p)
 
 # Test
-conference = IEEE('7957740')
-conference.download_papers()
+#conference = IEEE('7957740', '7958557')
+#conference.download_papers()
