@@ -4,16 +4,18 @@ import requests
 from HTMLParser import HTMLParser
 
 class ConferenceParser(HTMLParser):
-    def __init__(self):
+    def __init__(self, out_dir):
         HTMLParser.__init__(self)
         self.papers = []
+        self.out_dir = out_dir
 
     def handle_starttag(self, tag, attrs):
         if tag == 'a':
             attrs_dict = dict(attrs)
             if 'href' in attrs_dict and 'doi.org' in attrs_dict['href']:
-                pid = attrs_dict['href'].split('.')[-1]
-                self.papers.append(pid)
+                if self.out_dir in attrs_dict['href']:
+                    pid = attrs_dict['href'].split('.')[-1]
+                    self.papers.append(pid)
 
 url_conference = 'https://dl.acm.org/citation.cfm?id=%s&preflayout=flat#prox'
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36'}
@@ -21,7 +23,7 @@ url_paper = 'https://dl.acm.org/ft_gateway.cfm?id=%s'
 
 
 class ACM(object):
-    def __init__(self, cid, out_dir=None):
+    def __init__(self, cid, issue_id, out_dir=None):
         self.cid = cid
         if out_dir is None:
             self.out_dir = cid
@@ -36,7 +38,7 @@ class ACM(object):
         url = url_conference % cid
         response = requests.get(url, cookies=self.cookies, headers=headers)
         self.cookies.update(response.cookies)
-        parser = ConferenceParser()
+        parser = ConferenceParser(self.out_dir)
         parser.feed(response.text)
         return parser.papers
 
